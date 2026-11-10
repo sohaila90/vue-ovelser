@@ -1,11 +1,9 @@
-<script setup lang="ts"></script>
-
+<script setup lang="ts">
+import AppCounter from "./AppCounter.vue";
+</script>
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <h1>Sohaila Vue-øvelser</h1>
+  <AppCounter />
 </template>
 
 <style scoped></style>
