@@ -6,9 +6,9 @@ import TodoStats from "./TodoStats.vue";
 import type { Task } from "../types.ts";
 
 const tasks = ref<Task[]>([
-  { id: 1, text: "Lage en TODO-liste", done: false },
+  { id: 1, text: "Faste til solnedgang", done: false },
   { id: 2, text: "Legge til en ny oppgave", done: false },
-  { id: 3, text: "Markereen oppgave som ferdig", done: false },
+  { id: 3, text: "Markere en oppgave som ferdig", done: false },
 ]);
 
 const newTask = ref("");
@@ -42,7 +42,7 @@ function removeTask(id: number) {
     <p v-if="tasks.length === 0">Ingen oppgaver ennå</p>
     <ul v-else>
       <li v-for="task in tasks" :key="task.id">
-        <TodoItem :task="task" @toogle="toggleTask" @remove="removeTask" />
+        <TodoItem :task="task" @toggle="toggleTask" @remove="removeTask" />
       </li>
     </ul>
 
