@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
-type Task = {
-  id: number;
-  text: string;
-  done: boolean;
-  comment?: string;
-};
+import TodoForm from "./TodoForm.vue";
+import TodoItem from "./TodoItem.vue";
+import TodoStats from "./TodoStats.vue";
+import type { Task } from "../types.ts";
 
 const tasks = ref<Task[]>([
   { id: 1, text: "Lage en TODO-liste", done: false },
@@ -25,8 +22,9 @@ function addTask() {
   tasks.value.push({ id: nesteId++, text, done: false });
   newTask.value = "";
 }
-function toggleTask(task: Task) {
-  task.done = !task.done;
+function toggleTask(id: number) {
+  const task = tasks.value.find((t) => t.id === id);
+  if (task) task.done = !task.done;
 }
 function removeTask(id: number) {
   tasks.value = tasks.value.filter((task) => task.id !== id);
@@ -37,29 +35,18 @@ function removeTask(id: number) {
   <section class="todo">
     <h2>Oppgaver</h2>
 
-    <form @submit.prevent="addTask">
-      <input @keyup.enter="addTask" v-model.trim="newTask" placeholder="Skriv en oppgave..." />
-      <button type="submit">Legg til</button>
-    </form>
+    <TodoForm v-model="newTask" @add="addTask" />
 
     <input v-model.trim="filter" placeholder="Søk i oppgaver..." />
 
     <p v-if="tasks.length === 0">Ingen oppgaver ennå</p>
     <ul v-else>
-      <li
-        v-for="task in tasks.filter((t) => t.text.toLowerCase().includes(filter.toLowerCase()))"
-        :key="task.id"
-        :class="{ done: task.done }"
-      >
-        <div class="row">
-          <input type="checkbox" :checked="task.done" @change="toggleTask(task)" />
-          <span>{{ task.text }}</span>
-          <button @click="removeTask(task.id)">Slett</button>
-        </div>
-        <input v-model.lazy="task.comment" placeholder="Kommentar (valgfritt)" />
+      <li v-for="task in tasks" :key="task.id">
+        <TodoItem :task="task" @toogle="toggleTask" @remove="removeTask" />
       </li>
     </ul>
-    <p>{{ tasks.length }} oppgaver, {{ tasks.filter((t) => t.done).length }} ferdig</p>
+
+    <TodoStats :total="tasks.length" :done="tasks.filter((t) => t.done).length" />
   </section>
 </template>
 
